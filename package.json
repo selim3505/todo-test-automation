@@ -1,0 +1,33 @@
+{
+  "name": "todo-test-automation",
+  "version": "1.0.0",
+  "description": "Full-stack todo application with comprehensive test automation using Playwright and Supertest",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "test": "npm run test:api && npm run test:ui",
+    "test:api": "cd backend && npm run test",
+    "test:ui": "npx playwright test",
+    "test:ui-headed": "npx playwright test --headed",
+    "test:ui-debug": "npx playwright test --debug",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "postinstall": "npx playwright install",
+    "ci:install": "npm run install:all",
+    "ci:build": "npm run build",
+    "ci:test": "npm run test:api",
+    "ci:test:ui": "npm run test:ui",
+    "lint": "cd backend && npm run lint && cd ../frontend && npm run lint"
+  },
+  "keywords": ["todo", "automation", "testing", "playwright", "supertest", "react", "nodejs"],
+  "author": "Selim Test Engineer",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,65 @@
+name: 🚀 Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_run:
+    workflows: ["🧪 Test Automation CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: 🌐 Deploy Application
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: |
+        npm run install:all
+        
+    - name: 🔨 Build application
+      run: |
+        npm run build
+        
+    - name: 📊 Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-build
+        path: |
+          backend/dist/
+          frontend/build/
+          
+    - name: 🎉 Deployment success
+      run: |
+        echo "🚀 Application successfully built and ready for deployment!"
+        echo "📦 Artifacts uploaded and available for download"
+        echo "🔗 Backend build: backend/dist/"
+        echo "🔗 Frontend build: frontend/build/"
+
+  docker-build:
+    name: 🐳 Docker Build
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐳 Build Docker images
+      run: |
+        echo "Building Docker images..."
+        echo "This would build production Docker containers"
+        echo "Backend image: todo-backend:latest"
+        echo "Frontend image: todo-frontend:latest"
